@@ -14,39 +14,40 @@ import org.vr.cycle.LifeCycle
  */
 interface ActivityLifeCycleDispatcher {
 
-    val lifeCycle : LifeCycle
+    val lifecycle: LifeCycle
 
     val activity : Activity
 
-    fun intentToInitialState(intent : Intent?) : Bundle? = Bundle()
+    fun intentToInitialState(intent : Intent?) : Bundle? = intent?.extras
 
-    fun onActivityAttachBaseContext(context: Context) : Context = lifeCycle.attachBaseContext(context)
+    fun onActivityAttachBaseContext(context: Context) : Context = lifecycle.attachBaseContext(context)
 
     fun onActivityCreate(savedState: Bundle?, intent : Intent?) {}
 
     fun onActivityPostCreate(viewContainer: ViewGroup, savedState: Bundle?, intent : Intent?) {
-        lifeCycle.onCreate(intentToInitialState(intent), savedState)
-        lifeCycle.onCreateView(viewContainer)
+        val initialState = intentToInitialState(intent)
+        lifecycle.onCreate(initialState, savedState)
+        lifecycle.onCreateView(viewContainer, initialState, savedState)
     }
 
-    fun onActivityStart() = lifeCycle.onStart()
+    fun onActivityStart() = lifecycle.onStart()
 
-    fun onActivitySaveInstance(outState: Bundle) = lifeCycle.onSaveInstanceState(outState)
+    fun onActivitySaveInstance(outState: Bundle) = lifecycle.onSaveInstanceState(outState)
 
-    fun onActivityPause() = lifeCycle.onPause()
+    fun onActivityPause() = lifecycle.onPause()
 
     fun onActivityResume() {}
 
-    fun onActivityPostResume() = lifeCycle.onResume()
+    fun onActivityPostResume() = lifecycle.onResume()
 
-    fun onActivityStop() = lifeCycle.onStop()
+    fun onActivityStop() = lifecycle.onStop()
 
     fun onActivityDestroy() {
-        lifeCycle.onDestroyView()
-        lifeCycle.onDestroy()
-        lifeCycle.detachBaseContext()
+        lifecycle.onDestroyView()
+        lifecycle.onDestroy()
+        lifecycle.detachBaseContext()
     }
 
-    fun onActivityBackPressed() : Boolean = lifeCycle.onBackPressed()
+    fun onActivityBackPressed() : Boolean = lifecycle.onBackPressed()
 
 }

@@ -17,7 +17,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.vr.example.activities.several.SeveralActivitiesHome"/>
+        <activity android:name="org.vr.example.activities.several.screen.splash.SplashActivity"
+            android:theme="@style/SplashTheme"/>
+
+        <activity android:name="org.vr.example.activities.several.screen.home.SeveralActivitiesHome"
+            android:label="Home Screen"/>
+
     </application>
 
 </manifest>

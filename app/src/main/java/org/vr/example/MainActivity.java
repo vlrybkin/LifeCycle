@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import org.vr.example.activities.several.SeveralActivitiesHome;
+import org.vr.example.activities.several.screen.home.SeveralActivitiesHome;
 
 public class MainActivity extends ListActivity {
 
@@ -15,7 +15,7 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String[] strings = {"Based on activities"};
-        setListAdapter(new ArrayAdapter<>(this, android.R.layout.two_line_list_item, android.R.id.text1, strings));
+        setListAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, strings));
     }
 
     @Override

@@ -2,12 +2,13 @@
 
 buildscript {
     ext.kotlin_version = '1.0.3'
+
     repositories {
         jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
@@ -29,6 +30,8 @@ task clean(type: Delete) {
 }
 
 project.ext {
+    ankoVersion = 0.9
+
     compileSdkVersion = 23
     buildToolsVersion = "24.0.1"
 
@@ -37,12 +40,19 @@ project.ext {
 
     supportLibraryVersion = '24.2.1'
     daggerVersion = '2.5'
+    rxJavaVersion = '1.2.3'
+    rxAndroidVersion = '1.2.1'
     retrolambdaVersion = '2.3.0'
 }
 repositories {
     mavenCentral()
 }
+kapt {
+    generateStubs = true
+}
 dependencies {
+    compile "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 sourceSets {

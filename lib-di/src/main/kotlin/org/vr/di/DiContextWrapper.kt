@@ -7,22 +7,22 @@ import java.util.*
 /**
  * Created by vladimirrybkin on 01/11/16.
  */
-open class DiContextWrapper(base : Context) : ContextWrapper(base) {
+open class DiContextWrapper(base : Context, val root : Boolean = false) : ContextWrapper(base),
+        DiComponentsStorage {
 
     var components : HashMap<String, Any> = HashMap()
 
     override fun getSystemService(name : String) : Any? {
-        return components[name] ?: super.getSystemService(name)
+        return components[name] ?: super.getSystemService(name) ?: getFromApplicationContext(name)
     }
 
-    fun addComponent(name : String, component : Any) {
+    fun getFromApplicationContext(name: String) : Any? =
+        if (root) null else applicationContext.getSystemService(name)
+
+    override fun addComponent(name : String, component : Any) {
         components.put(name, component)
     }
 
-    fun removeComponent(name : String) {
-        components.remove(name)
-    }
-
-    fun findComponent(name : String) : Any? = components[name]
+    override fun findComponent(name : String) : Any? = components[name]
 
 }

@@ -1,1 +1,1 @@
-include ':app', ':lib-cycling', ':lib-di'
+include ':app', ':lib-cycling', ':lib-di', ':lib-router'

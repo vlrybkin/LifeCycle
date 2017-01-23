@@ -21,7 +21,8 @@ interface FragmentLifeCycleDispatcher {
 
     fun onFragmentCreate(savedState: Bundle?, arguments: Bundle?) = lifeCycle.onCreate(arguments, savedState)
 
-    fun onFragmentCreateView(viewContainer: ViewGroup) = lifeCycle.onCreateView(viewContainer)
+    fun onFragmentCreateView(viewContainer: ViewGroup, savedState : Bundle?, arguments: Bundle?)
+            = lifeCycle.onCreateView(viewContainer, arguments, savedState)
 
     fun onFragmentActivityCreated(savedState: Bundle?) = {}
 

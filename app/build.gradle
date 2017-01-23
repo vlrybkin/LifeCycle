@@ -36,11 +36,14 @@ dependencies {
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
     apt "com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion"
+    compile "io.reactivex:rxjava:$rootProject.ext.rxJavaVersion"
+    compile "io.reactivex:rxandroid:$rootProject.ext.rxAndroidVersion"
     compile "com.google.dagger:dagger:$rootProject.ext.daggerVersion"
     retrolambdaConfig "net.orfjackal.retrolambda:retrolambda:$rootProject.ext.retrolambdaVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile project(path: ':lib-cycling')
     compile project(path: ':lib-di')
+    compile project(path: ':lib-router')
 }
 repositories {
     mavenCentral()

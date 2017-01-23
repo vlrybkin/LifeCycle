@@ -6,18 +6,20 @@ import android.content.Context
 /**
  * Created by vladimirrybkin on 01/11/16.
  */
-abstract class DiApplication : Application() {
+abstract class DiApplication : Application(), DiComponentsStorage {
 
-    private var contextWrapper: DiContextWrapper? = null
+    private lateinit var contextWrapper: DiContextWrapper
 
-    abstract fun addApplicationComponents(contextWrapper : DiContextWrapper) : Unit
+    protected abstract fun onAddApplicationComponents() : Unit
 
     override fun attachBaseContext(base : Context) {
-        contextWrapper = DiContextWrapper(base)
-        addApplicationComponents(contextWrapper!!)
+        contextWrapper = DiContextWrapper(base, true)
+        onAddApplicationComponents()
         super.attachBaseContext(contextWrapper)
     }
 
-    fun getComponent(name : String) : Any? = contextWrapper?.findComponent(name)
+    override fun addComponent(name : String, component : Any ) = contextWrapper.addComponent(name, component)
+
+    override fun findComponent(name : String) : Any? = contextWrapper.findComponent(name)
 
 }

@@ -36,7 +36,8 @@ abstract class LifeCycleFragment : Fragment() {
     }
 
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
-        lifeCycleDispatcher.onFragmentCreateView(view.findViewById(getContainerViewId()) as ViewGroup)
+        lifeCycleDispatcher.onFragmentCreateView(view.findViewById(getContainerViewId()) as ViewGroup,
+                savedInstanceState, arguments)
     }
 
     override fun onActivityCreated(savedInstanceState : Bundle?) {

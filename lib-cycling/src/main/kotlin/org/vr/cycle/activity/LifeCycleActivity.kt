@@ -5,13 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
+import org.jetbrains.anko.frameLayout
+import org.jetbrains.anko.matchParent
 import org.vr.cycle.LifeCycle
 import org.vr.cycle.R
 
 abstract class LifeCycleActivity : AppCompatActivity() {
 
-    protected val lifeCycleDispatcher: ActivityLifeCycleDispatcher
-        get() = createLifeCycleDispatcher()
+    protected val lifeCycleDispatcher = createLifeCycleDispatcher()
 
     override fun attachBaseContext(context : Context) {
         super.attachBaseContext(lifeCycleDispatcher.onActivityAttachBaseContext(context))
@@ -19,7 +20,12 @@ abstract class LifeCycleActivity : AppCompatActivity() {
 
     protected abstract fun createLifeCycle() : LifeCycle
 
-    protected abstract fun setContentView()
+    open protected fun setContentView() {
+        frameLayout {
+            id = R.id.lifecycle_container
+            lparams(width = matchParent, height = matchParent)
+        }
+    }
 
     protected fun getContainerViewId() : Int = R.id.lifecycle_container
 
@@ -28,24 +34,39 @@ abstract class LifeCycleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifeCycleDispatcher.onActivityCreate(savedInstanceState, intent)
-        setContentView()
+        if (!isFinishing) {
+            lifeCycleDispatcher.onActivityCreate(savedInstanceState, intent)
+            setContentView()
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        val containerView : ViewGroup = findViewById(getContainerViewId()) as ViewGroup
-        lifeCycleDispatcher.onActivityPostCreate(containerView, savedInstanceState, intent)
+        if (!isFinishing) {
+            val containerView: ViewGroup = findViewById(getContainerViewId()) as ViewGroup
+            lifeCycleDispatcher.onActivityPostCreate(containerView, savedInstanceState, intent)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!isFinishing) {
+            lifeCycleDispatcher.onActivityStart()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        lifeCycleDispatcher.onActivityResume()
+        if (!isFinishing) {
+            lifeCycleDispatcher.onActivityResume()
+        }
     }
 
     override fun onPostResume() {
         super.onPostResume()
-        lifeCycleDispatcher.onActivityPostResume()
+        if (!isFinishing) {
+            lifeCycleDispatcher.onActivityPostResume()
+        }
     }
 
     override fun onSaveInstanceState(outState : Bundle) {
