@@ -7,7 +7,7 @@ import java.util.*
 /**
  * Created by vladimirrybkin on 01/11/16.
  */
-open class DiContextWrapper(base : Context, val root : Boolean = false) : ContextWrapper(base),
+class DiContextWrapper(base : Context, val root : Boolean = false) : ContextWrapper(base),
         DiComponentsStorage {
 
     var components : HashMap<String, Any> = HashMap()

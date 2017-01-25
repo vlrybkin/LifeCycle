@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -11,10 +10,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
 
-    compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
-    }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -22,10 +17,16 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs')
-    compile "com.android.support:appcompat-v7:24.2.1"
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.anko:anko-sdk19:$ankoVersion"
 }
+
+kapt {
+    generateStubs = true
+}
+
+
 repositories {
     mavenCentral()
 }
