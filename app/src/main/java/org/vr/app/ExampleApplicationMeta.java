@@ -2,12 +2,12 @@ package org.vr.app;
 
 import android.support.annotation.NonNull;
 
-import org.vr.app.activities.several.ParentActivityComponent;
-import org.vr.app.bootstrap.BootstrapComponent;
+import org.vr.app.activities.multi.MultiActivityMeta;
 import org.vr.app.bootstrap.BootstrapConsumer;
 import org.vr.app.bootstrap.BootstrapMeta;
+import org.vr.app.common.lifecycles.LifeCycleKeysModule;
 import org.vr.di.ApplicationScope;
-import org.vr.di.DiActivityModule;
+import org.vr.di.DiAppCompatActivityModule;
 import org.vr.di.DiApplicationModule;
 
 import dagger.Component;
@@ -23,16 +23,15 @@ public class ExampleApplicationMeta {
     @ApplicationScope
     @Component(modules = {
             DiApplicationModule.class,
-            ExampleApplicationModule.class
+            ExampleApplicationModule.class,
+            BootstrapMeta.BootstrapModule.class,
+            LifeCycleKeysModule.class
     })
     public interface ExampleApplicationComponent {
 
-        ParentActivityComponent createParentActivityComponent(DiActivityModule activityModule);
-
-        BootstrapComponent createBootstrapComponent(BootstrapMeta.BootstrapModule bootstrapModule);
-
-        BootstrapConsumer bootstrapConsumer();
-
+        MultiActivityMeta.MultiActivityComponent createActivityComponent(
+                DiAppCompatActivityModule activityModule,
+                MultiActivityMeta.MultiActivityModule multiActivityModule);
     }
 
     @Module
@@ -50,7 +49,6 @@ public class ExampleApplicationMeta {
         public BootstrapConsumer provideBootstrapConsumer() {
             return bootstrapConsumer;
         }
-
     }
 
 }

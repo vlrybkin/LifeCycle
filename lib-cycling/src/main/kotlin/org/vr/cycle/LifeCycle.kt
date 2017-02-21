@@ -12,7 +12,7 @@ interface LifeCycle {
 
     companion object {
         fun <T> getKey(clazz: Class<T>): String {
-            val annotation = clazz.getAnnotation(LifecycleKey::class.java)
+            val annotation = clazz.getAnnotation(LifeCycleKey::class.java)
             return annotation?.value ?: clazz.simpleName
         }
     }
@@ -23,9 +23,9 @@ interface LifeCycle {
 
     fun attachBaseContext(context: Context) : Context = context
 
-    fun onCreate(initialState: Bundle?, savedState: Bundle?) {}
+    fun onCreate(persistantState: Bundle?, savedState: Bundle?) {}
 
-    fun onCreateView(parentViewGroup: ViewGroup, initialState: Bundle?, savedInstanceState : Bundle?) {}
+    fun onCreateView(parentViewGroup: ViewGroup, persistantState: Bundle?, savedInstanceState : Bundle?) {}
 
     fun onStart() {}
 

@@ -17,12 +17,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.vr.app.activities.several.screen.splash.SplashActivity"
-            android:theme="@style/SplashTheme"/>
-
-        <activity android:name="org.vr.app.activities.several.screen.home.HomeActivity"
-            android:label="Home Screen"/>
-
+        <activity android:name="org.vr.app.activities.multi.MultiActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <data android:scheme="appscheme" android:host="view_router"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

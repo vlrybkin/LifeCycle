@@ -2,7 +2,7 @@ package org.vr.app.bootstrap;
 
 import android.support.annotation.NonNull;
 
-import javax.inject.Scope;
+import org.vr.di.ApplicationScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -10,26 +10,25 @@ import dagger.Provides;
 /**
  * Created by vladimirrybkin on 19/01/2017.
  */
-
 public class BootstrapMeta {
-
-    @Scope
-    public static @interface BootstrapScope {
-    }
 
     @Module
     public static class BootstrapModule {
 
         @NonNull
-        private Bootstrap bootstrap;
+        private BootstrapProvider bootstrapProvider;
 
-        public BootstrapModule(@NonNull Bootstrap bootstrap) {
-            this.bootstrap = bootstrap;
+        public BootstrapModule(@NonNull BootstrapProvider bootstrapProvider) {
+            this.bootstrapProvider = bootstrapProvider;
         }
 
-        @BootstrapScope
+        @ApplicationScope
         @Provides
         public Bootstrap provideBootstrap() {
+            Bootstrap bootstrap = bootstrapProvider.getBootstrap();
+            if (bootstrap == null) {
+                throw new RuntimeException("Bootstrap is not prepared");
+            }
             return bootstrap;
         }
 

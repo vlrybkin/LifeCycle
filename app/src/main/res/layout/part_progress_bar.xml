@@ -8,4 +8,4 @@
     android:layout_gravity="center"
     android:indeterminate="true"
     android:visibility="invisible"
-    tools:showIn="@layout/screen_root"/>
+    tools:showIn="@layout/root_left_nav"/>

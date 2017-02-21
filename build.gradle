@@ -37,22 +37,13 @@ project.ext {
     targetSdkVersion = 25
 
     supportLibraryVersion = '25.1.0'
-    daggerVersion = '2.5'
+    daggerVersion = '2.7'
     rxJavaVersion = '1.2.3'
     rxAndroidVersion = '1.2.1'
 }
 repositories {
     mavenCentral()
 }
-//kapt {
-//    generateStubs = true
-//}
-//dependencies {
-//    compile "com.google.dagger:dagger:$daggerVersion"
-//    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-//    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-//    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
-//}
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
 }

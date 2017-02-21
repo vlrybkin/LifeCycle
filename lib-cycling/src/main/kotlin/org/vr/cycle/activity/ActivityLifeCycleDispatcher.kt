@@ -22,9 +22,7 @@ interface ActivityLifeCycleDispatcher {
 
     fun onActivityAttachBaseContext(context: Context) : Context = lifecycle.attachBaseContext(context)
 
-    fun onActivityCreate(savedState: Bundle?, intent : Intent?) {}
-
-    fun onActivityPostCreate(viewContainer: ViewGroup, savedState: Bundle?, intent : Intent?) {
+    fun onActivityCreate(viewContainer: ViewGroup, savedState: Bundle?, intent : Intent?) {
         val initialState = intentToInitialState(intent)
         lifecycle.onCreate(initialState, savedState)
         lifecycle.onCreateView(viewContainer, initialState, savedState)

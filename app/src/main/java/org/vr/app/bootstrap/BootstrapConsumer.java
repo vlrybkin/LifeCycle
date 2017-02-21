@@ -8,6 +8,10 @@ import android.support.annotation.NonNull;
 
 public interface BootstrapConsumer {
 
+    boolean needBootstrapUpdate();
+
     void setup(@NonNull Bootstrap bootstrap);
+
+    void clear();
 
 }

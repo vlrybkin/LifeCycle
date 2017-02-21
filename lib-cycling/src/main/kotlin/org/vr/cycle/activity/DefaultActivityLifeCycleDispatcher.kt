@@ -10,5 +10,4 @@ import org.vr.cycle.LifeCycle
  */
 class DefaultActivityLifeCycleDispatcher(override val activity: Activity,
                                          override val lifecycle: LifeCycle) :
-        ActivityLifeCycleDispatcher {
-}
+        ActivityLifeCycleDispatcher

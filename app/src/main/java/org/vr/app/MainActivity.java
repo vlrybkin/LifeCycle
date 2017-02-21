@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import org.vr.app.activities.several.screen.home.HomeActivity;
+import org.vr.app.activities.multi.MultiActivity;
 
 public class MainActivity extends ListActivity {
 
@@ -22,8 +22,7 @@ public class MainActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         switch (position) {
             case 0:
-                Intent intent = new Intent();
-                intent.setClass(this, HomeActivity.class);
+                Intent intent = new Intent(this, MultiActivity.class);
                 startActivity(intent);
                 break;
         }

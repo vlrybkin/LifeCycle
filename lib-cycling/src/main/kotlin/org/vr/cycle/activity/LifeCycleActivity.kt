@@ -24,6 +24,7 @@ abstract class LifeCycleActivity : AppCompatActivity() {
         frameLayout {
             id = R.id.lifecycle_container
             lparams(width = matchParent, height = matchParent)
+            fitsSystemWindows = false
         }
     }
 
@@ -35,16 +36,9 @@ abstract class LifeCycleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!isFinishing) {
-            lifeCycleDispatcher.onActivityCreate(savedInstanceState, intent)
             setContentView()
-        }
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        if (!isFinishing) {
             val containerView: ViewGroup = findViewById(getContainerViewId()) as ViewGroup
-            lifeCycleDispatcher.onActivityPostCreate(containerView, savedInstanceState, intent)
+            lifeCycleDispatcher.onActivityCreate(containerView, savedInstanceState, intent)
         }
     }
 
