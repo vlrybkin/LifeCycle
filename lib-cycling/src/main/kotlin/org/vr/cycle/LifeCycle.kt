@@ -1,6 +1,8 @@
 package org.vr.cycle
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.ViewGroup
 
 /**
@@ -44,5 +46,11 @@ interface LifeCycle {
     fun detachBaseContext() {}
 
     fun onBackPressed() : Boolean = false
+
+    fun onResult(intentToResult: Bundle?) {}
+
+    fun onConfigurationChanged(config: Configuration) {}
+
+    fun onOptionsItemSelected(item: MenuItem): Boolean = false
 
 }

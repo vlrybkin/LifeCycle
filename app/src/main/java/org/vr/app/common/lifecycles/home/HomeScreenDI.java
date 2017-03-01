@@ -1,5 +1,9 @@
 package org.vr.app.common.lifecycles.home;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.view.View;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -12,7 +16,7 @@ import dagger.Module;
  * Created by vladimirrybkin on 17/01/2017.
  */
 
-public class HomeScreenMeta {
+public class HomeScreenDI {
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
@@ -20,8 +24,18 @@ public class HomeScreenMeta {
         String value() default "";
     }
 
+    public interface Injector {
+
+        @NonNull
+        Object inject(Context context,
+                      HomeScreen source,
+                      HomeScreenModule module,
+                      View parentView);
+
+    }
+
     @Scope
-    public static @interface HomeScreenScope {
+    public @interface HomeScreenScope {
     }
 
     @Module

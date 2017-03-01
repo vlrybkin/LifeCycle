@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.vr.cycle.LifeCycle
-import org.vr.framework.R
 import java.util.*
 
 /**
@@ -36,7 +35,7 @@ open class DefaultViewRouterTransition(val context: Context,
         enterLifeCycle.onCreate(enterPersistantState, enterSavedState)
 
         val rootFrame = LayoutInflater.from(context)
-                .inflate(R.layout.app_view_router_root, containerView, false) as ViewGroup
+                .inflate(org.vr.framework.R.layout.app_view_router_root, containerView, false) as ViewGroup
         enterLifeCycle.onCreateView(rootFrame, enterPersistantState, enterSavedState)
         attachView(rootFrame)
         enterLifeCycle.onStart()

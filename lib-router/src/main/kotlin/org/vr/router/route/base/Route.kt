@@ -108,7 +108,7 @@ class Route {
             Route.ON_TOP -> router.push(key, persistantState, savedState, inTransition, outTransition)
             Route.REPLACE_TOP -> router.replaceTop(key, persistantState, savedState, inTransition, outTransition)
             Route.CLEARSTACK -> router.restart(key, persistantState, savedState, inTransition, outTransition)
-            Route.POP -> router.pop(result, inTransition, outTransition)
+            Route.POP -> router.pop(result, outTransition)
         }
     }
 

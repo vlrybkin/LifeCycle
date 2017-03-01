@@ -1,6 +1,7 @@
 package org.vr.app.common.drawer;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -30,6 +31,10 @@ public class DefaultDrawerOwner implements DrawerOwner, DrawerContract.View,
     private final ActionBarDrawerToggle drawerToggle;
     @NonNull
     private final LinkedList<DrawerListener> listeners = new LinkedList<>();
+
+    private int selectedItem;
+
+    private boolean boundToToolbar;
 
     public DefaultDrawerOwner(@NonNull Activity activity,
             @NonNull DrawerLayout drawerLayout,
@@ -103,6 +108,7 @@ public class DefaultDrawerOwner implements DrawerOwner, DrawerContract.View,
 
     @Override
     public void selectItem(@IdRes int id) {
+        selectedItem = id;
         navigationView.setCheckedItem(id);
     }
 
@@ -116,9 +122,28 @@ public class DefaultDrawerOwner implements DrawerOwner, DrawerContract.View,
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return boundToToolbar && drawerToggle.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (boundToToolbar) {
+            drawerToggle.onConfigurationChanged(newConfig);
+        }
+    }
+
+    @Override
+    public void boundToToolbar(boolean bound) {
+        boundToToolbar = bound;
+        if (boundToToolbar) {
+            drawerToggle.syncState();
+        }
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        presenter.onItemSelected(item.getItemId());
-        return true;
+        return item.getItemId() != selectedItem && presenter.onItemSelected(item.getItemId());
     }
 
 }

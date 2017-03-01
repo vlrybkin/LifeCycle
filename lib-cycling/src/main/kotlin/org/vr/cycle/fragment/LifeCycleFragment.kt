@@ -1,12 +1,14 @@
 package org.vr.cycle.fragment
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import org.vr.cycle.LifeCycle
-import org.vr.cycle.R
 
 /**
  * A fragment class with the life cycle mapping.
@@ -19,8 +21,6 @@ abstract class LifeCycleFragment : Fragment() {
         get() = createLifeCycleDispatcher()
 
     protected abstract fun createLifeCycle() : LifeCycle
-
-    protected fun getContainerViewId() : Int = R.id.lifecycle_container
 
     protected fun createLifeCycleDispatcher(): FragmentLifeCycleDispatcher =
             DefaultFragmentLifeCycleDispatcher(this, createLifeCycle())
@@ -35,9 +35,14 @@ abstract class LifeCycleFragment : Fragment() {
         lifeCycleDispatcher.onFragmentCreate(savedInstanceState, arguments)
     }
 
-    override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
-        lifeCycleDispatcher.onFragmentCreateView(view.findViewById(getContainerViewId()) as ViewGroup,
-                savedInstanceState, arguments)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        if (container != null) {
+            lifeCycleDispatcher.onFragmentCreateView(container, savedInstanceState, arguments)
+            return container
+        } else {
+            return null
+        }
     }
 
     override fun onActivityCreated(savedInstanceState : Bundle?) {
@@ -83,6 +88,19 @@ abstract class LifeCycleFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         lifeCycleDispatcher.onFragmentDetach()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return lifeCycleDispatcher.onFragmentOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        lifeCycleDispatcher.onFragmentConfigurationChanged(newConfig)
+    }
+
+    fun onBackPressed() : Boolean {
+        return lifeCycleDispatcher.onFragmentBackPressed()
     }
 
 }

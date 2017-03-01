@@ -6,15 +6,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import org.vr.app.activities.multi.router.MultiActivityLifeCyclesFactory;
+import org.vr.app.activities.multi.router.activity.MultiActivityLifeCyclesFactory;
 import org.vr.app.common.lifecycles.LifeCyclesFactory;
-import org.vr.app.common.lifecycles.home.HomeScreenMeta;
-import org.vr.app.common.lifecycles.preconditions.PreconditionsMeta;
-import org.vr.app.common.lifecycles.splash.SplashScreenMeta;
-import org.vr.app.common.routers.activity.AppActivityRouterMeta;
+import org.vr.app.common.lifecycles.home.HomeScreenDI;
+import org.vr.app.common.lifecycles.preconditions.PreconditionsDI;
+import org.vr.app.common.lifecycles.splash.SplashScreenDI;
+import org.vr.app.activities.multi.router.activity.AppActivityRouterMeta;
 import org.vr.app.common.routers.view.AppViewRouterMeta;
-import org.vr.app.common.toolbar.AppBarOwner;
-import org.vr.app.common.toolbar.DefaultAppBarOwner;
+import org.vr.app.common.toolbar.AppBarPresenter;
+import org.vr.app.common.toolbar.DefaultAppBarPresenter;
 import org.vr.di.ActivityScope;
 import org.vr.di.DiAppCompatActivityModule;
 import org.vr.router.route.base.Route;
@@ -69,13 +69,13 @@ public class MultiActivityMeta {
         @InitialRoute
         @Provides
         public Route provideInitialRoute(Activity activity,
-                                         @PreconditionsMeta.PreconditionsQualifier Uri preconditionKey,
-                                         @HomeScreenMeta.HomeScreenQualifier Uri homeScreenKey,
-                                         @SplashScreenMeta.SplashScreenQualifier Uri splashScreenKey) {
+                                         @PreconditionsDI.PreconditionsQualifier Uri preconditionKey,
+                                         @HomeScreenDI.HomeScreenQualifier Uri homeScreenKey,
+                                         @SplashScreenDI.SplashScreenQualifier Uri splashScreenKey) {
             Intent intent = activity.getIntent();
             Bundle savedState = savedInstanceState;
-            Bundle inTransition = null;
-            Bundle outTransition = null;
+            Bundle inTransition;
+            Bundle outTransition;
 
             Bundle persistantState = intent.getBundleExtra(
                     DefaultActivityRouterLaunchDataFactory.Companion.getPERSISTANT_STATE());
@@ -101,13 +101,15 @@ public class MultiActivityMeta {
             }
 
             Route targetRoute = AppActivityRouterMeta.RouteBuilder.createUriRoute(key)
+                    .action(Route.Companion.getREPLACE_TOP())
                     .persistantState(persistantState)
                     .savedState(savedState)
                     .inTransition(inTransition != null ? new RouteTransition(inTransition) : null)
                     .outTransition(outTransition != null ? new RouteTransition(outTransition) : null);
 
             Route initRoute = AppActivityRouterMeta.RouteBuilder.createUriRoute(splashScreenKey)
-                    .persistantState(SplashScreenMeta.SplashScreenState.state(new Bundle(),
+                    .action(Route.Companion.getREPLACE_TOP())
+                    .persistantState(SplashScreenDI.SplashScreenState.state(new Bundle(),
                             targetRoute));
 
             targetRoute = AppViewRouterMeta.RouteBuilder.createUriRoute(key)
@@ -117,7 +119,7 @@ public class MultiActivityMeta {
                     .outTransition(outTransition != null ? new RouteTransition(outTransition) : null);
 
             return AppViewRouterMeta.RouteBuilder.createUriRoute(preconditionKey)
-                .persistantState(PreconditionsMeta.PreconditionsState.state(new Bundle(), targetRoute,
+                .persistantState(PreconditionsDI.PreconditionsState.state(new Bundle(), targetRoute,
                         initRoute));
         }
 
@@ -128,7 +130,7 @@ public class MultiActivityMeta {
         }
         @ActivityScope
         @Provides
-        public AppBarOwner provideAppBarOwner(DefaultAppBarOwner appBarOwner) {
+        public AppBarPresenter provideAppBarOwner(DefaultAppBarPresenter appBarOwner) {
             return appBarOwner;
         }
 

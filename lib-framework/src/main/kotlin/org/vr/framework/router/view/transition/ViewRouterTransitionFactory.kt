@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import org.vr.cycle.LifeCycle
 import org.vr.router.route.transition.RouteTransition
+import org.vr.framework.router.view.ViewRouterTransition
 
 /**
  * Created by vladimirrybkin on 14/02/2017.

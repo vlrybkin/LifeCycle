@@ -1,16 +1,15 @@
-package org.vr.app.common.routers.activity;
+package org.vr.app.activities.multi.router.activity;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import org.vr.app.activities.multi.router.AppActivityRouterLaunchDataFactory;
-import org.vr.app.common.lifecycles.home.HomeScreenMeta;
-import org.vr.app.common.lifecycles.splash.SplashScreenMeta;
+import org.vr.app.common.lifecycles.collapse_recycler.CollapseRecyclerScreenMeta;
+import org.vr.app.common.lifecycles.home.HomeScreenDI;
+import org.vr.app.common.lifecycles.splash.SplashScreenDI;
 import org.vr.app.common.uri.Uris;
 import org.vr.di.ActivityScope;
 import org.vr.router.route.base.Route;
-import org.vr.router.route.transition.RouteTransition;
 import org.vr.router.router.base.Router;
 import org.vr.router.router.uri.activity.ActivityRouter;
 
@@ -60,26 +59,25 @@ public class AppActivityRouterMeta {
         }
 
         @ActivityScope
-        @SplashScreenMeta.SplashScreenQualifier
-        @Provides
-        public Route provideDefaultSplashScreenRoute(
-                @SplashScreenMeta.SplashScreenQualifier(Uris.HOST_AUTHORITY_ACTIVITY_ROUTER)
-                        Route route) {
-            return route.inTransition(new RouteTransition(RouteTransition.Companion.getTYPE_FADEIN()));
-        }
-
-        @ActivityScope
-        @SplashScreenMeta.SplashScreenQualifier(Uris.HOST_AUTHORITY_ACTIVITY_ROUTER)
+        @SplashScreenDI.SplashScreenQualifier
         @Provides
         public Route provideSplashScreenRoute(
-                @SplashScreenMeta.SplashScreenQualifier Uri key) {
+                @SplashScreenDI.SplashScreenQualifier Uri key) {
             return RouteBuilder.createUriRoute(key);
         }
 
         @ActivityScope
-        @HomeScreenMeta.HomeScreenQualifier(Uris.HOST_AUTHORITY_ACTIVITY_ROUTER)
+        @HomeScreenDI.HomeScreenQualifier
         @Provides
-        public Route provideHomeScreenRoute(@HomeScreenMeta.HomeScreenQualifier Uri key) {
+        public Route provideHomeScreenRoute(@HomeScreenDI.HomeScreenQualifier Uri key) {
+            return RouteBuilder.createUriRoute(key);
+        }
+
+        @ActivityScope
+        @CollapseRecyclerScreenMeta.CollapseRecyclerScreenQualifier
+        @Provides
+        public Route provideCollapseRecycleScreenRoute(
+                @CollapseRecyclerScreenMeta.CollapseRecyclerScreenQualifier Uri key) {
             return RouteBuilder.createUriRoute(key);
         }
 

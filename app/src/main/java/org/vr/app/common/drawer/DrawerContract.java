@@ -22,7 +22,7 @@ public interface DrawerContract {
 
         void detachView();
 
-        void onItemSelected(@IdRes int id);
+        boolean onItemSelected(@IdRes int id);
 
         void highlightItem(@NonNull Uri enterKey);
     }

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import org.vr.app.R;
 import org.vr.app.annotations.BootstrapRequired;
 import org.vr.app.annotations.ParentLayout;
-import org.vr.app.common.lifecycles.Injector;
 import org.vr.cycle.DefaultLifeCycle;
 import org.vr.cycle.LifeCycleKey;
 
@@ -20,12 +19,12 @@ import javax.inject.Inject;
 public class SplashScreen extends DefaultLifeCycle implements SplashScreenContract.SplashScreenView {
 
     @NonNull
-    private final Injector<SplashScreen> injector;
+    private final SplashScreenDI.Injector injector;
 
     @NonNull
     private SplashScreenContract.SplashScreenPresenter presenter;
 
-    public SplashScreen(@NonNull Injector<SplashScreen> injector) {
+    public SplashScreen(@NonNull SplashScreenDI.Injector injector) {
         this.injector = injector;
     }
 
@@ -43,7 +42,7 @@ public class SplashScreen extends DefaultLifeCycle implements SplashScreenContra
             throw new RuntimeException("initiate state is null");
         }
 
-        SplashScreenMeta.SplashScreenModule splashModule = new SplashScreenMeta
+        SplashScreenDI.SplashScreenModule splashModule = new SplashScreenDI
                 .SplashScreenModule(persistantState);
         injector.inject(getContext(), this, splashModule);
         presenter.attachView(this);

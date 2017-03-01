@@ -8,21 +8,25 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.ViewGroup;
 
 import org.jetbrains.annotations.Nullable;
+import org.vr.app.activities.multi.lifecycles.CollapsingRecyclerScreenComponent;
 import org.vr.app.activities.multi.lifecycles.HomeScreenComponent;
 import org.vr.app.activities.multi.lifecycles.PreconditionsComponent;
 import org.vr.app.activities.multi.lifecycles.SplashScreenComponent;
-import org.vr.app.activities.multi.router.MultiActivityLifeCyclesFactory;
+import org.vr.app.activities.multi.router.activity.MultiActivityLifeCyclesFactory;
 import org.vr.app.annotations.DrawerEnabled;
 import org.vr.app.common.drawer.DefaultDrawerOwner;
 import org.vr.app.common.drawer.DrawerContract;
 import org.vr.app.common.drawer.DrawerOwner;
 import org.vr.app.common.drawer.DrawerPresenter;
-import org.vr.app.common.lifecycles.home.HomeScreenMeta;
-import org.vr.app.common.lifecycles.preconditions.PreconditionsMeta;
-import org.vr.app.common.lifecycles.splash.SplashScreenMeta;
+import org.vr.app.common.lifecycles.collapse_recycler.CollapseRecyclerScreenMeta;
+import org.vr.app.common.lifecycles.home.HomeScreenDI;
+import org.vr.app.common.lifecycles.preconditions.PreconditionsDI;
+import org.vr.app.common.lifecycles.splash.SplashScreenDI;
 import org.vr.app.common.routers.view.AppViewRouter;
 import org.vr.app.common.routers.view.AppViewRouterMeta;
 import org.vr.app.common.routers.view.AppViewRouterTransitionFactory;
+import org.vr.app.common.toolbar.AppBarPresenter;
+import org.vr.app.common.ui.ToolbarModule;
 import org.vr.cycle.LifeCycle;
 import org.vr.framework.router.view.ViewRouterListener;
 import org.vr.framework.router.view.transition.ViewRouterTransitionListener;
@@ -53,12 +57,16 @@ public class MultiActivityLifeCycleMeta {
         void inject(MultiActivityLifeCycle lifeCycle);
 
         PreconditionsComponent createPreconditionsComponent(
-                PreconditionsMeta.PreconditionsModule preconditionsModule);
+                PreconditionsDI.PreconditionsModule preconditionsModule);
 
         SplashScreenComponent createSplashScreenComponent(
-                SplashScreenMeta.SplashScreenModule splashScreenModule);
+                SplashScreenDI.SplashScreenModule splashScreenModule);
 
-        HomeScreenComponent createHomeScreenComponent(HomeScreenMeta.HomeScreenModule dep);
+        HomeScreenComponent createHomeScreenComponent(HomeScreenDI.HomeScreenModule screenModule,
+                                                      ToolbarModule toolbarModule);
+
+        CollapsingRecyclerScreenComponent createCollapsingRecyclerScreenComponent(CollapseRecyclerScreenMeta.CollapseRecyclerScreenModule dep);
+
     }
 
     @Module
@@ -90,15 +98,19 @@ public class MultiActivityLifeCycleMeta {
 
         @MultiActivityLifeCyclerScope
         @Provides
-        public ViewRouterListener provideViewRouterListener(DrawerOwner drawerOwner,
-                                                            DrawerContract.Presenter presenter) {
+        public ViewRouterListener provideViewRouterListener(
+                AppBarPresenter appBarOwner,
+                DrawerOwner drawerOwner,
+                DrawerContract.Presenter presenter) {
             return transition -> transition.registerListener(new ViewRouterTransitionListener() {
                 @Override
                 public void onTransitionStart(@NonNull Uri enterKey,
                         @NonNull LifeCycle enterLifeCycle,
                         @Nullable Uri exitKey,
                         @Nullable LifeCycle exitLifeCycle) {
+                    appBarOwner.setView(null);
                     drawerOwner.lock();
+                    drawerOwner.boundToToolbar(false);
                     presenter.highlightItem(enterKey);
                 }
 
@@ -113,11 +125,11 @@ public class MultiActivityLifeCycleMeta {
                             drawerEnabledAnnotation.required();
                     if (drawerEnabled) {
                         drawerOwner.unlock();
+                        drawerOwner.boundToToolbar(drawerEnabledAnnotation.boundToAppBar());
                     }
                 }
             });
         }
-
 
         @MultiActivityLifeCyclerScope
         @Provides

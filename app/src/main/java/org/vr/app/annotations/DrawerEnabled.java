@@ -9,4 +9,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DrawerEnabled {
     boolean required() default false;
+    boolean boundToAppBar() default true;
 }

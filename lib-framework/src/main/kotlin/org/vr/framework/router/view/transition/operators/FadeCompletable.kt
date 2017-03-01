@@ -22,7 +22,7 @@ class FadeCompletable(private val view: View,
                 .setDuration(duration)
                 .setInterpolator(interpolator)
                 .withEndAction {
-                        subscriber.onCompleted()
+                    subscriber.onCompleted()
                 }
     }
 

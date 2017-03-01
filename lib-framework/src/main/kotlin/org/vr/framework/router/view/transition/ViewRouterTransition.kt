@@ -1,8 +1,7 @@
-package org.vr.framework.router.view.transition
+package org.vr.framework.router.view
 
-/**
- * Created by vladimirrybkin on 14/02/2017.
- */
+import org.vr.framework.router.view.transition.ViewRouterTransitionListener
+
 interface ViewRouterTransition {
 
     fun start()

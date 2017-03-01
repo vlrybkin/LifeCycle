@@ -2,4 +2,7 @@
     <string name="app_name">Cycling</string>
     <string name="drawer_open" >Open </string>
     <string name="drawer_close">Close</string>
+
+    <string name="home_title">Home Screen</string>
+    <string name="recycler_title">Recycler Screen</string>
 </resources>

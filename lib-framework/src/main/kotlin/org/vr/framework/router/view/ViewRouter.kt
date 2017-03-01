@@ -1,11 +1,12 @@
 package org.vr.framework.router.view
 
 import android.content.Context
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.ViewGroup
 import org.vr.cycle.LifeCycle
-import org.vr.framework.router.view.transition.ViewRouterTransition
 import org.vr.framework.router.view.transition.ViewRouterTransitionFactory
 import org.vr.framework.router.view.transition.ViewRouterTransitionListener
 import org.vr.router.route.transition.RouteTransition
@@ -19,7 +20,7 @@ abstract class ViewRouter(val context: Context,
 
     private var currentKey: Uri? = null
     private var currentLifeCycle : LifeCycle? = null
-    private var currentTransition: ViewRouterTransition? = null
+    private var currentTransition: org.vr.framework.router.view.ViewRouterTransition? = null
 
     private var nextKey: Uri? = null
     private var nextPersistantState: Bundle? = null
@@ -30,6 +31,8 @@ abstract class ViewRouter(val context: Context,
     private var listener: ViewRouterListener? = null
     private var transitionFactory : ViewRouterTransitionFactory = DefaultViewRouterTransitionFactory()
 
+    override var destroyed = false
+
     abstract fun getLifeCycle(key: Uri): LifeCycle
 
     override fun push(key: Uri, persistantState: Bundle?, savedState: Bundle?,
@@ -38,12 +41,14 @@ abstract class ViewRouter(val context: Context,
         return replaceTop(key, persistantState, savedState, inTransition, outTransition)
     }
 
-    override fun pop(result: Bundle?, inTransition: RouteTransition?, outTransition: RouteTransition?): Boolean {
+    override fun pop(result: Bundle?, outTransition: RouteTransition?): Boolean {
         return false
     }
 
     override fun replaceTop(key: Uri, persistantState: Bundle?, savedState: Bundle?,
                             inTransition: RouteTransition?, outTransition: RouteTransition?): Boolean {
+        if (destroyed) return false
+
         if (currentTransition == null) {
             val enterLifeCycle = getLifeCycle(key)
             val localCurrentTransition = createTransition(context, containerView, key, enterLifeCycle,
@@ -101,6 +106,14 @@ abstract class ViewRouter(val context: Context,
         currentLifeCycle?.onSaveInstanceState(out)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return currentLifeCycle?.onOptionsItemSelected(item) ?: false
+    }
+
+    override fun onConfigurationChanged(configuration: Configuration) {
+        currentLifeCycle?.onConfigurationChanged(configuration)
+    }
+
     fun setTransitionFactory(transitionFactory: ViewRouterTransitionFactory) {
         this.transitionFactory = transitionFactory
     }
@@ -112,7 +125,7 @@ abstract class ViewRouter(val context: Context,
     private fun createTransition(context: Context, containerView: ViewGroup,
         enterKey: Uri, enterLifeCycle: LifeCycle, enterPersistantState: Bundle?, enterSavedState: Bundle?,
         exitKey: Uri?, exitLifeCycle: LifeCycle?,
-        inTransition: RouteTransition?, outTransition: RouteTransition?) : ViewRouterTransition {
+        inTransition: RouteTransition?, outTransition: RouteTransition?) : org.vr.framework.router.view.ViewRouterTransition {
 
         return transitionFactory.createTransition(context, containerView, enterKey, enterLifeCycle,
                 enterPersistantState, enterSavedState, exitKey, exitLifeCycle, inTransition, outTransition)
@@ -121,6 +134,16 @@ abstract class ViewRouter(val context: Context,
     override fun backPressed(): Boolean {
         val localCurrentLifeCycle = currentLifeCycle ?: return false
         return localCurrentLifeCycle.onBackPressed()
+    }
+
+    override fun destroy() {
+        super.destroy()
+        currentTransition?.cancel()
+        nextKey = null
+        nextPersistantState = null
+        nextSavedState = null
+        nextInTransition = null
+        nextOutTransition = null
     }
 
     private inner class DefaultViewRouterTransitionFactory : ViewRouterTransitionFactory

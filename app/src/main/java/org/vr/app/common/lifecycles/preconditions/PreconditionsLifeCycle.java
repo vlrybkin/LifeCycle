@@ -7,39 +7,35 @@ import android.view.ViewGroup;
 
 import org.vr.app.annotations.BootstrapRequired;
 import org.vr.app.bootstrap.BootstrapConsumer;
-import org.vr.app.common.lifecycles.Injector;
 import org.vr.cycle.DefaultLifeCycle;
 import org.vr.cycle.LifeCycleKey;
 import org.vr.router.route.base.Route;
 
 import javax.inject.Inject;
 
-/**
- * Created by vladimirrybkin on 01/11/16.
- */
 @LifeCycleKey(value = "/preconditions/default")
 @BootstrapRequired(required = false)
 final public class PreconditionsLifeCycle extends DefaultLifeCycle {
 
     @NonNull
-    private final Injector<PreconditionsLifeCycle> injector;
+    private final PreconditionsDI.Injector injector;
 
-    @PreconditionsMeta.ContinueRoute
+    @PreconditionsDI.ContinueRoute
     @Inject
     protected Route backRoute;
 
     @Inject
     protected BootstrapConsumer bootstrapConsumer;
 
-    @PreconditionsMeta.InitRoute
+    @PreconditionsDI.InitRoute
     @Inject
     protected Route splashScreenRoute;
 
-    @PreconditionsMeta.CheckBootstrap
+    @PreconditionsDI.CheckBootstrap
     @Inject
     protected Boolean checkBootstrap;
 
-    public PreconditionsLifeCycle(@NonNull Injector<PreconditionsLifeCycle> injector) {
+    public PreconditionsLifeCycle(@NonNull PreconditionsDI.Injector injector) {
         this.injector = injector;
     }
 
@@ -52,10 +48,13 @@ final public class PreconditionsLifeCycle extends DefaultLifeCycle {
             throw new RuntimeException("The lifecycle initial state is undefined");
         }
 
-        PreconditionsMeta.PreconditionsModule preconditionsModule =
-                new PreconditionsMeta.PreconditionsModule(persistantState);
+        PreconditionsDI.PreconditionsModule preconditionsModule =
+                new PreconditionsDI.PreconditionsModule(persistantState);
         injector.inject(getContext(), this, preconditionsModule);
+    }
 
+    @Override
+    public void onStart() {
         if (checkBootstrap && bootstrapConsumer.needBootstrapUpdate()) {
             splashScreenRoute.go(getContext());
         } else {

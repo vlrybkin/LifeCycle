@@ -3,7 +3,9 @@ package org.vr.cycle.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.ViewGroup
 import org.vr.cycle.LifeCycle
 
@@ -19,6 +21,8 @@ interface ActivityLifeCycleDispatcher {
     val activity : Activity
 
     fun intentToInitialState(intent : Intent?) : Bundle? = intent?.extras
+
+    fun intentToResult(intent : Intent?) : Bundle? = intent?.extras
 
     fun onActivityAttachBaseContext(context: Context) : Context = lifecycle.attachBaseContext(context)
 
@@ -47,5 +51,12 @@ interface ActivityLifeCycleDispatcher {
     }
 
     fun onActivityBackPressed() : Boolean = lifecycle.onBackPressed()
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) =
+            lifecycle.onResult(intentToResult(data))
+
+    fun onActivityConfigurationChanged(config: Configuration) = lifecycle.onConfigurationChanged(config)
+
+    fun onActivityOptionsItemSelected(item: MenuItem): Boolean = lifecycle.onOptionsItemSelected(item)
 
 }

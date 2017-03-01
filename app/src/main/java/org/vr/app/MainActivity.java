@@ -14,6 +14,7 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getListView().setFitsSystemWindows(true);
         String[] strings = {"Based on activities"};
         setListAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, strings));
     }

@@ -11,10 +11,9 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
 import org.vr.app.annotations.ParentLayout;
-import org.vr.app.common.toolbar.AppBarOwner;
 import org.vr.cycle.LifeCycle;
+import org.vr.framework.router.view.ViewRouterTransition;
 import org.vr.framework.router.view.transition.BaseViewRouterTransition;
-import org.vr.framework.router.view.transition.ViewRouterTransition;
 import org.vr.framework.router.view.transition.ViewRouterTransitionFactory;
 import org.vr.framework.router.view.transition.operators.FadeCompletable;
 import org.vr.router.route.transition.RouteTransition;
@@ -30,12 +29,8 @@ import rx.subscriptions.Subscriptions;
  */
 public class AppViewRouterTransitionFactory implements ViewRouterTransitionFactory {
 
-    @NonNull
-    private final AppBarOwner appBarOwner;
-
     @Inject
-    public AppViewRouterTransitionFactory(@NonNull AppBarOwner appBarOwner) {
-        this.appBarOwner = appBarOwner;
+    public AppViewRouterTransitionFactory() {
     }
 
     @NonNull

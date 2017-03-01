@@ -34,14 +34,13 @@ public class MultiActivity extends LifeCycleActivity {
     @NotNull
     @Override
     protected LifeCycle createLifeCycle() {
-        return new MultiActivityLifeCycle((context, source, deps) -> {
+        return new MultiActivityLifeCycle((context, source, module) -> {
             MultiActivityMeta.MultiActivityComponent activityComponent =
                 (MultiActivityMeta.MultiActivityComponent) context.getSystemService(
                         DiNames.Companion.getACTIVITY_COMPONENT());
             MultiActivityLifeCycleMeta.MultiActivityLifeCycleComponent
                     lifeCycleComponent = activityComponent.createMultiActivityLifeCycleComponent(
-                        (MultiActivityLifeCycleMeta.MultiActivityLifeCycleMetaModule) deps[0],
-                        new AppViewRouterMeta.AppViewRouterModule());
+                        module, new AppViewRouterMeta.AppViewRouterModule());
             wrapper.addComponent(MultiActivityLifeCycleMeta.MultiActivityLifeCycleComponent.name,
                     lifeCycleComponent);
             lifeCycleComponent.inject(source);

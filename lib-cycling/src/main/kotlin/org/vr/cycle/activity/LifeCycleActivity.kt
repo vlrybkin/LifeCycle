@@ -2,8 +2,10 @@ package org.vr.cycle.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import android.view.ViewGroup
 import org.jetbrains.anko.frameLayout
 import org.jetbrains.anko.matchParent
@@ -85,7 +87,16 @@ abstract class LifeCycleActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent) {
         super.onActivityResult(requestCode, resultCode, data)
-        // TODO
+        lifeCycleDispatcher.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onConfigurationChanged(config : Configuration) {
+        super.onConfigurationChanged(config)
+        lifeCycleDispatcher.onActivityConfigurationChanged(config)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return lifeCycleDispatcher.onActivityOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {

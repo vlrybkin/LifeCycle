@@ -1,8 +1,10 @@
 package org.vr.cycle.fragment
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.MenuItem
 import android.view.ViewGroup
 import org.vr.cycle.LifeCycle
 
@@ -41,5 +43,11 @@ interface FragmentLifeCycleDispatcher {
     fun onFragmentDestroy() = lifeCycle.onDestroy()
 
     fun onFragmentDetach() = lifeCycle.detachBaseContext()
+
+    fun onFragmentOptionsItemSelected(item: MenuItem): Boolean = lifeCycle.onOptionsItemSelected(item)
+
+    fun onFragmentConfigurationChanged(newConfig: Configuration) = lifeCycle.onConfigurationChanged(newConfig)
+
+    fun  onFragmentBackPressed(): Boolean = lifeCycle.onBackPressed()
 
 }

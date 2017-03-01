@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.vr.app.activities.multi.MultiActivity">
+        <activity android:name="org.vr.app.activities.multi.MultiActivity"
+            android:label="">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <action android:name="android.intent.action.VIEW"/>

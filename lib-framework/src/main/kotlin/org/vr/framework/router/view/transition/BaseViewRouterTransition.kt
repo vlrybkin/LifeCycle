@@ -4,6 +4,7 @@ import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import org.vr.cycle.LifeCycle
+import org.vr.framework.router.view.ViewRouterTransition
 import java.util.*
 /**
  * Created by vladimirrybkin on 14/02/2017.

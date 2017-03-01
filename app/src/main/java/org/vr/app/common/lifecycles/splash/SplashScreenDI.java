@@ -19,7 +19,7 @@ import dagger.Provides;
 /**
  * Created by vladimirrybkin on 17/01/2017.
  */
-public class SplashScreenMeta {
+public class SplashScreenDI {
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
@@ -31,24 +31,12 @@ public class SplashScreenMeta {
     public @interface SplashScreenScope {
     }
 
-    public static final class SplashScreenState {
+    public interface Injector {
 
-        private static final String ROUTE = SplashScreenState.class.getSimpleName() + "#ROUTE";
-
-        public static Bundle state(@NonNull Bundle out, @NonNull Route route) {
-            Bundle bundle = new Bundle();
-            route.toBundle(bundle);
-            out.putBundle(ROUTE, bundle);
-            return out;
-        }
-
-        public static Route getInitialLifeCycleRoute(@NonNull Bundle persistantState) {
-            if (persistantState.getBundle(ROUTE) == null) {
-                throw new RuntimeException("Illegal state");
-            }
-
-            return new Route(persistantState.getBundle(ROUTE));
-        }
+        @NonNull
+        Object inject(Context context,
+                      SplashScreen source,
+                      SplashScreenModule module);
 
     }
 
